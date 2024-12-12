@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,11 +18,12 @@ import useApi from "@/hooks/useApi";
 
 export default function LoginForm() {
   const api = useApi();
-  const { login } = api.post; // Asegúrate de que esta función esté definida correctamente
+  const { login } = api.post;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,10 +37,13 @@ export default function LoginForm() {
     }
 
     try {
-      const response = await login({ email, password }); // Asegúrate de que este método reciba un objeto con email y password
-      console.log("Login successful:", response);
-
-      // Aquí puedes manejar el inicio de sesión exitoso (ej. redirigir, guardar token)
+      const response = await login(email, password);
+      if (response && response.access_token) {
+        localStorage.setItem("access_token", response.access_token);
+        navigate("/dashboard");
+      } else {
+        setError("Login failed: No token received");
+      }
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message || "Invalid email or password");
