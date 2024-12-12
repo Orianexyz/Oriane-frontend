@@ -5,18 +5,8 @@ const apiPost = (
   apiClient: AxiosInstance,
   navigate?: (path: string) => void
 ) => {
-  const login = async ({
-    email,
-    password,
-  }: {
-    email: string;
-    password: string;
-  }) => {
-    return await apiCall(apiClient, "api/auth/login", navigate, "POST", {
-      email,
-      password,
-    });
-  };
+  const login = async (data: object) =>
+    await apiCall(apiClient, "api/auth/login", navigate, "POST", data);
 
   const protectedUsers = async (data: object) =>
     await apiCall(apiClient, "/api/users/protected", navigate, "POST", data);
