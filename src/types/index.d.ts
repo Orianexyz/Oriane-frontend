@@ -95,3 +95,8 @@ type LoginResponse = {
     email: string;
   };
 };
+
+interface AuthContextType {
+  token: string | null;
+  setToken: (token: string | null) => void;
+}

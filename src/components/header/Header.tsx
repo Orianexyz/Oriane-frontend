@@ -1,29 +1,45 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { MenuIcon, MailIcon, BellIcon } from "lucide-react";
 import logo from "/small.png";
 import useApi from "@/hooks/useApi";
+import { useAuth } from "@/hooks/useAuth";
 
 const Header = () => {
   const navigate = useNavigate();
-  const { del } = useApi();
-  const [user, setUser] = useState<{ email: string; token: string } | null>({
-    email: "user@example.com",
-    token: "fakeToken123",
-  });
+  const api = useApi();
+  const { token, setToken } = useAuth();
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        if (!token) return;
+
+        console.log("Access token in useAuth:", token);
+
+        const response = await api.get.auth();
+        console.log("User data fetched:", response);
+
+        setUserEmail(response.email || "Unknown");
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setUserEmail(null);
+      }
+    };
+
+    fetchUser();
+  }, [api, token]);
 
   const handleLogout = async () => {
     try {
-      if (!user || !user.token) {
-        throw new Error("User not authenticated");
-      }
-
-      await del.auth.logout(user.token);
-      setUser(null);
+      await api.del.logout();
+      setToken(null);
+      localStorage.removeItem("access_token");
       navigate("/");
     } catch (error) {
-      console.error("Error logging out:", error);
+      console.error("Logout failed:", error);
     }
   };
 
@@ -51,22 +67,10 @@ const Header = () => {
         >
           <BellIcon className="h-5 w-5" />
         </Button>
-        {user ? (
-          <>
-            <span className="text-sm text-gray-700">{user.email}</span>
-            <Button onClick={handleLogout} variant="outline" size="sm">
-              Sign Out
-            </Button>
-          </>
-        ) : (
-          <Button
-            onClick={() => navigate("/login")}
-            variant="outline"
-            size="sm"
-          >
-            Login
-          </Button>
-        )}
+        <span className="text-sm text-gray-700">{userEmail}</span>
+        <Button onClick={handleLogout} variant="outline" size="sm">
+          Sign Out
+        </Button>
       </div>
     </header>
   );

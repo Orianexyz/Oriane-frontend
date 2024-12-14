@@ -15,6 +15,7 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { IconLockPassword, IconMessage } from "@tabler/icons-react";
 import useApi from "@/hooks/useApi";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function LoginForm() {
   const api = useApi();
@@ -24,6 +25,7 @@ export default function LoginForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { setToken } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,11 +40,14 @@ export default function LoginForm() {
 
     try {
       const response = await login(email, password);
-      if (response && response.access_token) {
-        localStorage.setItem("access_token", response.access_token);
+      const { access_token } = response;
+      console.log(access_token);
+      if (access_token) {
+        setToken(response.access_token);
+        console.log("Token saved to localStorage:", access_token);
         navigate("/dashboard");
       } else {
-        setError("Login failed: No token received");
+        console.error("No access token received");
       }
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
