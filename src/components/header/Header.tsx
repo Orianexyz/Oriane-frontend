@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { MenuIcon, MailIcon, BellIcon } from "lucide-react";
-import logo from "/logo.png";
+import logo from "@/assets/logo.svg";
 import useApi from "@/hooks/useApi";
 import { useAuth } from "@/hooks/useAuth";
 
