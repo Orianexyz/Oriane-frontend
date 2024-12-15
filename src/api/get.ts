@@ -6,6 +6,7 @@ import type {
   ProtectedContent,
   WatchedContent,
   MatchedContent,
+  AuthenticatedUser,
 } from "@/types/database.types";
 import { ITEMS_PER_PAGE } from "@/constants";
 
@@ -44,12 +45,26 @@ const apiGet = (
       navigate
     );
 
+  const auth = async (): Promise<AuthenticatedUser> => {
+    try {
+      const response = await apiCall<AuthenticatedUser>(
+        apiClient,
+        `/api/auth/user`
+      );
+      return response;
+    } catch (error) {
+      console.error("Error fetching authenticated user:", error);
+      throw error;
+    }
+  };
+
   return {
     protectedUsers,
     watchedUsers,
     protectedContent,
     watchedContent,
     matchedContent,
+    auth,
   };
 };
 

@@ -58,3 +58,11 @@ export interface MatchedContent {
   status: string;
   created_at: string;
 }
+
+export interface AuthenticatedUser {
+  id: string;
+  email: string;
+  name?: string;
+  createdAt: string;
+  updatedAt: string;
+}

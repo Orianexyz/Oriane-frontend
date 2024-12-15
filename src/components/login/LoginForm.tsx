@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,14 +15,17 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { IconLockPassword, IconMessage } from "@tabler/icons-react";
 import useApi from "@/hooks/useApi";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function LoginForm() {
   const api = useApi();
-  const { login } = api.post; // Asegúrate de que esta función esté definida correctamente
+  const { login } = api.post;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { setToken } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,10 +39,16 @@ export default function LoginForm() {
     }
 
     try {
-      const response = await login({ email, password }); // Asegúrate de que este método reciba un objeto con email y password
-      console.log("Login successful:", response);
-
-      // Aquí puedes manejar el inicio de sesión exitoso (ej. redirigir, guardar token)
+      const response = await login(email, password);
+      const { access_token } = response;
+      console.log(access_token);
+      if (access_token) {
+        setToken(response.access_token);
+        console.log("Token saved to localStorage:", access_token);
+        navigate("/dashboard");
+      } else {
+        console.error("No access token received");
+      }
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message || "Invalid email or password");

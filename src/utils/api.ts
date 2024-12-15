@@ -1,4 +1,4 @@
-import type { AxiosInstance } from "axios";
+import type { AxiosInstance, AxiosResponse } from "axios";
 
 export async function apiCall<T>(
   apiClient: AxiosInstance,
@@ -8,20 +8,19 @@ export async function apiCall<T>(
   body?: object
 ): Promise<T> {
   try {
-    const response =
-      method === "GET"
-        ? await apiClient.get(endpoint)
-        : method === "POST"
-        ? await apiClient.post(endpoint, body)
-        : method === "PUT"
-        ? await apiClient.put(endpoint, body)
-        : method === "PATCH"
-        ? await apiClient.patch(endpoint, body)
-        : method === "DELETE"
-        ? await apiClient.delete(endpoint)
-        : null;
+    const response: AxiosResponse<T> = await (method === "GET"
+      ? apiClient.get(endpoint)
+      : method === "POST"
+      ? apiClient.post(endpoint, body)
+      : method === "PUT"
+      ? apiClient.put(endpoint, body)
+      : method === "PATCH"
+      ? apiClient.patch(endpoint, body)
+      : method === "DELETE"
+      ? apiClient.delete(endpoint)
+      : Promise.reject(new Error("Unsupported HTTP method")));
 
-    return response?.data as T;
+    return response.data;
   } catch (error) {
     if (navigate) {
       navigate("/error");

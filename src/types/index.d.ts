@@ -87,3 +87,16 @@ interface NavItem {
   bottom?: boolean;
   icon: React.ReactNode | null;
 }
+
+type LoginResponse = {
+  access_token: string;
+  user: {
+    id: string;
+    email: string;
+  };
+};
+
+interface AuthContextType {
+  token: string | null;
+  setToken: (token: string | null) => void;
+}
