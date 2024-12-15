@@ -8,7 +8,6 @@ interface ProtectedRouteProps {
 // Componente para proteger rutas
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const token = localStorage.getItem("accessToken");
-  console.log("Token in ProtectedRoute:", token);
 
   if (!token) {
     return <Navigate to="/" replace />;
