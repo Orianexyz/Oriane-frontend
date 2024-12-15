@@ -21,10 +21,10 @@ export default function CreatorsList() {
   const [creators, setCreators] = useState<Creator[]>([]);
   const [watchedCreators, setWatchedCreators] = useState<Creator[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoading, setIsLoading] = useState(true);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  console.log(isLoading);
   const [error, setError] = useState<string | null>(null);
+  console.log(error);
 
   const headers = [
     "Username",
