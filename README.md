@@ -95,7 +95,3 @@ To learn more about the routes and behaviour of the backend, see the backend REA
 ## 📄 License
 
 This project is licensed under the MIT License.
-
-```
-
-```
