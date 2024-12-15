@@ -29,9 +29,9 @@ Ensure you have the following installed:
 
 Create a `.env` file in the project root with the following configuration:
 
-````env
+```env
 VITE_API_URL=https://oriane-backend.onrender.com
-``
+```
 
 ## 💻 Installation and setup
 
@@ -39,13 +39,13 @@ VITE_API_URL=https://oriane-backend.onrender.com
 
 ```bash
 bun i
-``
+```
 
 ### 2. Start development server
 
 ```bash
 bun run dev
-``
+```
 
 Visit the application at http://localhost:5173.
 
@@ -53,7 +53,7 @@ Visit the application at http://localhost:5173.
 
 ```bash
 bun run build
-``
+```
 
 The production-ready files will be available in the `dist` folder.
 
@@ -82,7 +82,7 @@ src/
 ├── main.tsx            # Entry point of the React application
 ├── vite-env.d.ts       # TypeScript environment declarations for Vite
 └── index.html          # Root HTML file for the React application
-``
+```
 
 ## 🔄 Backend Interaction
 
@@ -95,4 +95,3 @@ To learn more about the routes and behaviour of the backend, see the backend REA
 ## 📄 License
 
 This project is licensed under the MIT License.
-````
